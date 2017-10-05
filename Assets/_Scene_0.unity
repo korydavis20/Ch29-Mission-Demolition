@@ -550,6 +550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 021473a8fa0e62d43aa9ff70fd2eb99a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  easing: 0.05
   ___________________________________________________________________: 0
   poi: {fileID: 0}
   camZ: 0
@@ -637,7 +638,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabProjectile: {fileID: 1071708768042100, guid: 6849989b5437a0b4ea6782fb503d05d1,
     type: 2}
-  velocityMult: 4
+  velocityMult: 10
   ____________________________________________________: 0
   launchPoint: {fileID: 0}
   launchPos: {x: 0, y: 0, z: 0}
