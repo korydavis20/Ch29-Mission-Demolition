@@ -3,15 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Slingshot : MonoBehaviour {
-	static public Slingshot S;
+	static private Slingshot S;
+	[Header("Set in Inspector")]
 	public GameObject prefabProjectile;
-	public float velocityMult = 4f;
-	public bool ____________________________________________________;
+	public float velocityMult = 8f;
+	[Header("Set Dynamically")]
 	public GameObject launchPoint;
 	public Vector3 launchPos;
 	public GameObject projectile;
 	public bool aimingMode;
+	private Rigidbody projectileRigidbody;
 
+	static public Vector3 LAUNCH_POS{
+		get{
+			if(S == null)	return Vector3.zero;
+				return S.launchPos;
+		}
+	}
 	void Awake(){
 		//set the slingshot singleton
 		S = this;
@@ -39,15 +47,11 @@ public class Slingshot : MonoBehaviour {
 		//start it at launch point
 		projectile.transform.position = launchPos;
 		//set it to isKinematic for now
-		projectile.GetComponent<Rigidbody>().isKinematic = true;
+		//projectile.GetComponent<Rigidbody>().isKinematic = true;
+		projectileRigidbody = projectile.GetComponent<Rigidbody> ();
+		projectileRigidbody.isKinematic = true;
 	}
-
-
-
-	// Use this for initialization
-	void Start () {
 		
-	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -73,10 +77,12 @@ public class Slingshot : MonoBehaviour {
 		if(Input.GetMouseButtonUp(0)){
 			//the mouse has been released
 			aimingMode = false;
-			projectile.GetComponent<Rigidbody> ().isKinematic = false;
-			projectile.GetComponent<Rigidbody> ().velocity = -mouseDelta * velocityMult;
-			FollowCam.S.poi = projectile;
+			projectileRigidbody.isKinematic = false;
+			projectileRigidbody.velocity = -mouseDelta * velocityMult;
+			FollowCam.POI = projectile;
 			projectile = null;
+			MissionDemolition.ShotFired();
+			ProjectileLine.S.poi = projectile;
 		}
 	}
 }

@@ -15,14 +15,11 @@ public class Goal : MonoBehaviour {
 			//if so, set goalMet to true
 			Goal.goalMet = true;
 			//Also set the alpha of the color to higher opacity
-			Color c = GetComponent<Renderer>().material.color;
-			c.a = 0.9f;
-			GetComponent<Renderer>().material.color = c;
+			Material mat = GetComponent<Renderer>().material;
+			Color c = mat.color;
+			c.a = 1;
+			mat.color = c;
 		}
 	}
 
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

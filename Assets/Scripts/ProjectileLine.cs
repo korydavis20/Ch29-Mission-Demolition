@@ -6,13 +6,13 @@ public class ProjectileLine : MonoBehaviour {
 	static public ProjectileLine S; //singleton
 
 	//fields set in the unity inpector pane
+	[Header("Set in Inspector")]
 	public float minDist = 0.1f;
-	public bool ____________________________________________________________;
 
 	//fields set dynamically
-	public LineRenderer line; 
+	private LineRenderer line; 
 	private GameObject _poi;
-	public List<Vector3> points;
+	private List<Vector3> points;
 
 	// Use this for initialization
 	void Awake () {
@@ -56,12 +56,11 @@ public class ProjectileLine : MonoBehaviour {
 		}
 		if (points.Count == 0) {
 			//if this is the launch point...
-			Vector3 launchPos = Slingshot.S.launchPoint.transform.position;
-			Vector3 launchPosDiff = pt - launchPos;
+			Vector3 launchPosDiff = pt - Slingshot.LAUNCH_POS;
 			//it adds an extra bit of  line to aid aiming later
 			points.Add (pt + launchPosDiff);
 			points.Add (pt);
-			line.SetVertexCount (2);
+			line.positionCount = 2;
 			//Sets first two points
 			line.SetPosition (0, points [0]);
 			line.SetPosition (1, points [1]);
@@ -70,7 +69,7 @@ public class ProjectileLine : MonoBehaviour {
 		} else {
 			//normal behavior of adding a point 
 			points.Add(pt);
-			line.SetVertexCount (points.Count);
+			line.positionCount = points.Count;
 			line.SetPosition (points.Count - 1, lastPoint);
 			line.enabled = true;
 		}
@@ -80,9 +79,9 @@ public class ProjectileLine : MonoBehaviour {
 		get{
 			if(points == null){
 				//if there are no points, returns vector3.zero 
-				return(Vector3.zero);
+				return (Vector3.zero);
 			}
-			return(points[points.Count-1]);
+			return (points[points.Count-1]);
 		}
 
 	}
@@ -91,9 +90,9 @@ public class ProjectileLine : MonoBehaviour {
 	void FixedUpdate () {
 		if (poi == null) {
 			//if there is no poi, search for one
-			if(FollowCam.S.poi != null){
-				if (FollowCam.S.poi.tag == "Projectile") {
-					poi = FollowCam.S.poi;
+			if(FollowCam.POI != null){
+				if (FollowCam.POI.tag == "Projectile") {
+					poi = FollowCam.POI;
 				} else {
 					return; //return if we didn't find a poi
 				}
@@ -104,7 +103,7 @@ public class ProjectileLine : MonoBehaviour {
 
 		//if there is a poi, it's loc is added every fixedupdate
 		AddPoint();
-		if (poi.GetComponent<Rigidbody>().IsSleeping()) {
+		if (FollowCam.POI == null) {
 			//once the poi is sleeping, it is clear
 			poi = null;
 		}
